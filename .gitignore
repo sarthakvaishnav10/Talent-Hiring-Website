@@ -1,0 +1,42 @@
+# ===========================================
+# SERVER CONFIGURATION
+# ===========================================
+PORT=3000
+NODE_ENV=development
+HOST=localhost
+
+# ===========================================
+# DATABASE CONFIGURATION
+# ===========================================
+# Local MongoDB
+MONGODB_URI=mongodb://localhost:27017/spotlit
+
+# MongoDB Atlas (Production)
+# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/spotlit?retryWrites=true&w=majority
+
+# Database Name
+DB_NAME=spotlit
+
+# ===========================================
+# SESSION CONFIGURATION
+# ===========================================
+SESSION_SECRET=your-super-secret-session-key-change-this-in-production
+SESSION_MAX_AGE=86400000
+
+# ===========================================
+# AUTHENTICATION
+# ===========================================
+# JWT Secret (if using JWT)
+JWT_SECRET=your-jwt-secret-key-change-this
+
+# Password Salt Rounds
+BCRYPT_SALT_ROUNDS=12
+
+# ===========================================
+# EMAIL CONFIGURATION (Optional)
+# ===========================================
+# For sending notifications, password resets, etc.
+EMAIL_SERVICE=gmail
+EMAIL_USER=your-email@gmail.com
+EMAIL_PASS=your-app-specific-password
+EMAIL_FROM=noreply@spotlit.com

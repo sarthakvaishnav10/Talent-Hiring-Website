@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - Spotlit</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9ff;
+            overflow-x: hidden;
+        }
+
+        /* Header */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: rgb(74, 98, 255);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: rgb(74, 98, 255);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, rgb(74, 98, 255), rgb(120, 140, 255));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(74, 98, 255, 0.3);
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-top: 100px;
+            min-height: 100vh;
+            padding: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            color: white;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.08)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.05)"/></svg>') repeat;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .profile-info {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 2rem;
+            align-items: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .upload-overlay {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 35px;
+            height: 35px;
+            background: rgb(74, 98, 255);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border: 3px solid white;
+        }
+
+        .profile-details h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .stat span {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .edit-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .edit-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Profile Content */
+        .profile-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        .profile-main {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border: 1px solid rgba(74, 98, 255, 0.1);
+        }
+
+        .card h3 {
+            color: rgb(74, 98, 255);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* About Section */
+        .about-text {
+            line-height: 1.8;
+            color: #666;
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .skill-tag {
+            background: linear-gradient(135deg, rgb(74, 98, 255), rgb(120, 140, 255));
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Portfolio Section */
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .portfolio-item {
+            aspect-ratio: 16/9;
+            background: linear-gradient(45deg, #f0f2f5, #e1e8ed);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .portfolio-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+
+        .portfolio-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(74, 98, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .portfolio-item:hover .portfolio-overlay {
+            opacity: 1;
+        }
+
+        /* Sidebar Cards */
+        .contact-info {
+            list-style: none;
+        }
+
+        .contact-info li {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.5rem 0;
+        }
+
+        .contact-info i {
+            width: 20px;
+            color: rgb(74, 98, 255);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .social-link.facebook { background: #3b5998; }
+        .social-link.twitter { background: #1da1f2; }
+        .social-link.instagram { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+        .social-link.linkedin { background: #0077b5; }
+        .social-link.youtube { background: #ff0000; }
+
+        .availability-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Reviews Section */
+        .reviews {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .review {
+            padding: 1.5rem;
+            background: #f8f9ff;
+            border-radius: 10px;
+            border-left: 4px solid rgb(74, 98, 255);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .reviewer-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .review-rating {
+            color: #ffd700;
+        }
+
+        .review-text {
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Responsive Design */
+        .mobile-menu {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #333;
+            cursor: pointer;
+        }
+
+        @media (max-width: 968px) {
+            .profile-content {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                order: -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+
+            .profile-info {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 1.5rem;
+            }
+
+            .profile-details h1 {
+                font-size: 2rem;
+            }
+
+            .profile-stats {
+                justify-content: center;
+            }
+
+            .portfolio-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                padding: 0 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .profile-header {
+                padding: 2rem 1rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Edit Mode Styles */
+        .edit-mode {
+            border: 2px dashed rgb(74, 98, 255);
+            background: rgba(74, 98, 255, 0.05);
+            position: relative;
+        }
+
+        .edit-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgb(74, 98, 255);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover .edit-overlay {
+            opacity: 1;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e6ed;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: rgb(74, 98, 255);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: rgb(74, 98, 255);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: rgb(60, 80, 220);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 98, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #545b62;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/home" class="logo">
+                <i class="fa-solid fa-code"></i>
+                <span>Spotlit</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/profile" class="active">Profile</a></li>
+                <li><a href="/browse">Browse</a></li>
+                <li><a href="/messages">Messages</a></li>
+            </ul>
+            <div class="user-profile">
+                <i class="fas fa-bell" style="font-size: 1.2rem; color: #666; margin-right: 1rem; cursor: pointer;"></i>
+                <div class="avatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
+            <button class="mobile-menu">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar">
+                        <i class="fas fa-camera"></i>
+                        <div class="upload-overlay">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                    </div>
+                    <div class="profile-details">
+                        <h1>Alex Johnson</h1>
+                        <p>Professional Actor & Content Creator</p>
+                        <div class="profile-stats">
+                            <div class="stat">
+                                <h3>127</h3>
+                                <span>Projects</span>
+                            </div>
+                            <div class="stat">
+                                <h3>4.9</h3>
+                                <span>Rating</span>
+                            </div>
+                            <div class="stat">
+                                <h3>89</h3>
+                                <span>Reviews</span>
+                            </div>
+                        </div>
+                    </div>
+                    <a href="#" class="edit-btn" onclick="toggleEditMode()">
+                        <i class="fas fa-edit"></i>
+                        Edit Profile
+                    </a>
+                </div>
+            </div>
+
+            <!-- Profile Content -->
+            <div class="profile-content">
+                <!-- Main Content -->
+                <div class="profile-main">
+                    <!-- About Section -->
+                    <div class="card">
+                        <h3><i class="fas fa-user"></i> About Me</h3>
+                        <button class="edit-overlay" onclick="editSection('about')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <div id="about-content">
+                            <p class="about-text">
+                                Passionate actor and content creator with over 8 years of experience in the entertainment industry. 
+                                I specialize in commercial acting, voice-over work, and social media content creation. 
+                                I've worked with major brands like Nike, Coca-Cola, and Samsung, bringing their stories to life 
+                                through compelling performances and engaging content.
+                            </p>
+                            <p class="about-text">
+                                My mission is to create authentic, impactful content that resonates with audiences and drives 
+                                meaningful engagement for brands. I'm always looking for new challenges and exciting 
+                                collaborations in the multimedia space.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Skills Section -->
+                    <div class="card">
+                        <h3><i class="fas fa-star"></i> Skills & Specialties</h3>
+                        <button class="edit-overlay" onclick="editSection('skills')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <div class="skills-grid">
+                            <span class="skill-tag">Acting</span>
+                            <span class="skill-tag">Voice Over</span>
+                            <span class="skill-tag">Content Creation</span>
+                            <span class="skill-tag">Social Media</span>
+                            <span class="skill-tag">Commercial Acting</span>
+                            <span class="skill-tag">Improvisation</span>
+                            <span class="skill-tag">Video Production</span>
+                            <span class="skill-tag">Brand Partnership</span>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Section -->
+                    <div class="card">
+                        <h3><i class="fas fa-images"></i> Portfolio</h3>
+                        <button class="edit-overlay" onclick="editSection('portfolio')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <div class="portfolio-grid">
+                            <div class="portfolio-item">
+                                <i class="fas fa-play"></i>
+                                <div class="portfolio-overlay">
+                                    <div>
+                                        <h4>Nike Commercial</h4>
+                                        <p>2024</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <i class="fas fa-video"></i>
+                                <div class="portfolio-overlay">
+                                    <div>
+                                        <h4>Brand Campaign</h4>
+                                        <p>2024</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <i class="fas fa-microphone"></i>
+                                <div class="portfolio-overlay">
+                                    <div>
+                                        <h4>Voice Over Reel</h4>
+                                        <p>2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="portfolio-item">
+                                <i class="fas fa-camera"></i>
+                                <div class="portfolio-overlay">
+                                    <div>
+                                        <h4>Photo Shoot</h4>
+                                        <p>2023</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reviews Section -->
+                    <div class="card">
+                        <h3><i class="fas fa-star"></i> Recent Reviews</h3>
+                        <div class="reviews">
+                            <div class="review">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Sarah Marketing Director</span>
+                                    <span class="review-rating">★★★★★</span>
+                                </div>
+                                <p class="review-text">
+                                    "Alex delivered an outstanding performance for our commercial. Professional, 
+                                    punctual, and brought incredible energy to the project. Highly recommend!"
+                                </p>
+                            </div>
+                            <div class="review">
+                                <div class="review-header">
+                                    <span class="reviewer-name">Mike Producer</span>
+                                    <span class="review-rating">★★★★★</span>
+                                </div>
+                                <p class="review-text">
+                                    "Working with Alex was a pleasure. Great communication, creative input, 
+                                    and delivered exactly what we needed for our brand campaign."
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="profile-sidebar">
+                    <!-- Availability -->
+                    <div class="card">
+                        <div class="availability-status">
+                            <div class="status-dot"></div>
+                            <span><strong>Available for Projects</strong></span>
+                        </div>
+                        <p style="color: #666; font-size: 0.9rem;">
+                            Currently accepting new projects and collaborations. 
+                            Response time: Usually within 2-4 hours.
+                        </p>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="card">
+                        <h3><i class="fas fa-address-book"></i> Contact Info</h3>
+                        <button class="edit-overlay" onclick="editSection('contact')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <ul class="contact-info">
+                            <li>
+                                <i class="fas fa-envelope"></i>
+                                <span>alex.johnson@email.com</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-phone"></i>
+                                <span>+1 (555) 123-4567</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Los Angeles, CA</span>
+                            </li>
+                            <li>
+                                <i class="fas fa-globe"></i>
+                                <span>www.alexjohnson.com</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="card">
+                        <h3><i class="fas fa-share-alt"></i> Social Media</h3>
+                        <button class="edit-overlay" onclick="editSection('social')">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <div class="social-links">
+                            <a href="#" class="social-link instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                            <a href="#" class="social-link twitter">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="social-link linkedin">
+                                <i class="fab fa-linkedin"></i>
+                            </a>
+                            <a href="#" class="social-link youtube">
+                                <i class="fab fa-youtube"></i>
+                            </a>
+                            <a href="#" class="social-link facebook">
+                                <i class="fab fa-facebook"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="card">
+                        <h3><i class="fas fa-chart-bar"></i> Quick Stats</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; text-align: center;">
+                            <div>
+                                <h4 style="color: rgb(74, 98, 255); font-size: 1.5rem;">8+</h4>
+                                <p style="color: #666; font-size: 0.9rem;">Years Experience</p>
+                            </div>
+                            <div>
+                                <h4 style="color: rgb(74, 98, 255); font-size: 1.5rem;">95%</h4>
+                                <p style="color: #666; font-size: 0.9rem;">Client Satisfaction</p>
+                            </div>
+                            <div>
+                                <h4 style="color: rgb(74, 98, 255); font-size: 1.5rem;">24h</h4>
+                                <p style="color: #666; font-size: 0.9rem;">Avg Response</p>
+                            </div>
+                            <div>
+                                <h4 style="color: rgb(74, 98, 255); font-size: 1.5rem;">50+</h4>
+                                <p style="color: #666; font-size: 0.9rem;">Brands Worked</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Edit mode toggle
+        let editMode = false;
+
+        function toggleEditMode() {
+            editMode = !editMode;
+            const cards = document.querySelectorAll('.card');
+            const editBtn = document.querySelector('.edit-btn');
+            
+            if (editMode) {
+                cards.forEach(card => card.classList.add('edit-mode'));
+                editBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                editBtn.style.background = 'rgba(76, 175, 80, 0.2)';
+            } else {
+                cards.forEach(card => card.classList.remove('edit-mode'));
+                editBtn.innerHTML = '<i class="fas fa-edit"></i> Edit Profile';
+                editBtn.style.background = 'rgba(255, 255, 255, 0.2)';
+            }
+        }
+
+        function editSection(section) {
+            // This would open a modal or inline editing for the specific section
+            alert(`Edit ${section} section - This would open an editing interface`);
+        }
+
+        // Portfolio item interactions
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            item.addEventListener('click', function() {
+                // This would open a portfolio item viewer/editor
+                alert('Portfolio item clicked - This would open the item details');
+            });
+        });
+
+        // Social link interactions
+        document.querySelectorAll('.social-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                // This would handle social media link functionality
+                const platform = this.classList[1];
+                alert(`Open ${platform} profile or edit link`);
+            });
+        });
+
+        // Profile avatar upload
+        document.querySelector('.profile-avatar').addEventListener('click', function() {
+            // This would open a file picker for profile image
+            alert('Profile image upload - This would open file picker');
+        });
+
+        // Smooth scrolling for any internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Mobile menu functionality
+        const mobileMenu = document.querySelector('.mobile-menu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu.addEventListener('click', () => {
+            navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+        });
+
+        // Notification bell interaction
+        document.querySelector('.fa-bell').addEventListener('click', function() {
+            // This would show notifications dropdown
+            alert('Notifications - This would show your recent notifications');
+        });
+
+        // User avatar dropdown (in navbar)
+        document.querySelector('.user-profile .avatar').addEventListener('click', function() {
+            // This would show user menu dropdown
+            alert('User menu - This would show profile options, settings, logout, etc.');
+        });
+
+        // Add skill functionality (when in edit mode)
+        function addSkill() {
+            const skillsGrid = document.querySelector('.skills-grid');
+            const newSkill = prompt('Enter new skill:');
+            if (newSkill && newSkill.trim()) {
+                const skillTag = document.createElement('span');
+                skillTag.className = 'skill-tag';
+                skillTag.textContent = newSkill.trim();
+                skillTag.addEventListener('click', function() {
+                    if (editMode) {
+                        if (confirm('Remove this skill?')) {
+                            this.remove();
+                        }
+                    }
+                });
+                skillsGrid.appendChild(skillTag);
+            }
+        }
+
+        // Make skills clickable for removal in edit mode
+        document.querySelectorAll('.skill-tag').forEach(skill => {
+            skill.addEventListener('click', function() {
+                if (editMode) {
+                    if (confirm('Remove this skill?')) {
+                        this.remove();
+                    }
+                }
+            });
+        });
+
+        // Add portfolio item functionality
+        function addPortfolioItem() {
+            const portfolioGrid = document.querySelector('.portfolio-grid');
+            const newItem = document.createElement('div');
+            newItem.className = 'portfolio-item';
+            newItem.innerHTML = `
+                <i class="fas fa-plus"></i>
+                <div class="portfolio-overlay">
+                    <div>
+                        <h4>New Item</h4>
+                        <p>Click to edit</p>
+                    </div>
+                </div>
+            `;
+            newItem.addEventListener('click', function() {
+                alert('Add new portfolio item - This would open upload/edit interface');
+            });
+            portfolioGrid.appendChild(newItem);
+        }
+
+        // Animate stats on page load
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat h3');
+            stats.forEach(stat => {
+                const finalValue = parseInt(stat.textContent.replace(/\D/g, ''));
+                let currentValue = 0;
+                const increment = finalValue / 30;
+                
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= finalValue) {
+                        currentValue = finalValue;
+                        clearInterval(timer);
+                    }
+                    
+                    const suffix = stat.textContent.replace(/[\d,]/g, '');
+                    if (stat.textContent.includes('.')) {
+                        stat.textContent = currentValue.toFixed(1) + suffix;
+                    } else {
+                        stat.textContent = Math.floor(currentValue) + suffix;
+                    }
+                }, 50);
+            });
+        }
+
+        // Run animation on page load
+        window.addEventListener('load', () => {
+            setTimeout(animateStats, 500);
+        });
+
+        // Handle form submissions (for edit mode)
+        function handleFormSubmission(formData) {
+            // This would handle saving profile data
+            console.log('Saving profile data:', formData);
+            alert('Profile updated successfully!');
+        }
+
+        // Auto-save functionality for edit mode
+        let autoSaveTimer;
+        function scheduleAutoSave() {
+            clearTimeout(autoSaveTimer);
+            autoSaveTimer = setTimeout(() => {
+                if (editMode) {
+                    console.log('Auto-saving profile changes...');
+                    // This would auto-save changes
+                }
+            }, 3000);
+        }
+
+        // Add event listeners for auto-save
+        document.addEventListener('input', scheduleAutoSave);
+        document.addEventListener('change', scheduleAutoSave);
+
+        // Handle contact info click-to-copy
+        document.querySelectorAll('.contact-info li span').forEach(contact => {
+            contact.addEventListener('click', function() {
+                navigator.clipboard.writeText(this.textContent).then(() => {
+                    // Show temporary tooltip
+                    const tooltip = document.createElement('div');
+                    tooltip.textContent = 'Copied!';
+                    tooltip.style.cssText = `
+                        position: absolute;
+                        background: rgb(74, 98, 255);
+                        color: white;
+                        padding: 0.5rem 1rem;
+                        border-radius: 5px;
+                        font-size: 0.8rem;
+                        z-index: 1000;
+                        pointer-events: none;
+                    `;
+                    document.body.appendChild(tooltip);
+                    
+                    const rect = this.getBoundingClientRect();
+                    tooltip.style.left = rect.left + 'px';
+                    tooltip.style.top = (rect.top - 40) + 'px';
+                    
+                    setTimeout(() => {
+                        document.body.removeChild(tooltip);
+                    }, 2000);
+                }).catch(() => {
+                    console.log('Copy failed');
+                });
+            });
+            
+            // Add cursor pointer style
+            contact.style.cursor = 'pointer';
+        });
+
+        // Initialize tooltips for interactive elements
+        function initializeTooltips() {
+            const interactiveElements = [
+                { selector: '.fa-bell', message: 'View notifications' },
+                { selector: '.avatar', message: 'User menu' },
+                { selector: '.upload-overlay', message: 'Change profile picture' },
+                { selector: '.edit-overlay', message: 'Edit this section' }
+            ];
+
+            interactiveElements.forEach(({ selector, message }) => {
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(el => {
+                    el.title = message;
+                });
+            });
+        }
+
+        // Initialize tooltips on page load
+        initializeTooltips();
+
+        // Handle keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + E to toggle edit mode
+            if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+                e.preventDefault();
+                toggleEditMode();
+            }
+            
+            // Escape to exit edit mode
+            if (e.key === 'Escape' && editMode) {
+                toggleEditMode();
+            }
+        });
+
+        console.log('Profile page initialized successfully!');
+    </script>
+</body>
+</html>

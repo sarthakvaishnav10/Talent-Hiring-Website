@@ -1,0 +1,63 @@
+# Flash-message apko ye allow karta hai ki ek aap ek route ka data dusre route mai dikha sako
+
+ (1) install connect-flash
+  npm i connect-flash
+
+(2) make sure you setup express session
+  npm i express-session
+  then in app.js type : const expressSession = require("express-session");
+  then neeche in app.js : app.use(expressSession({
+    resave: false,
+    saveUninitialized: false,
+    secret: "hello world"
+  }))
+
+ (3) make sure you put connect-flash in app.use() Function below session
+   first upar write : const flash = require("connect-flash");
+   then below write : app.use(flash());
+
+ (4) kisi bhi route mai flash message bhejne ke liye, aapko request object par flash method call karna hoga.
+   example:
+   router.get("/example", (req, res) => {
+     req.flash("info", "This is a flash message");
+   });
+
+
+# HOW TO FIND DATA WITH CASE INSENSITIVE NAME
+
+router.get("/find", async function(req,res){
+  var regex = new RegExp("^Sarthak$","i");
+  let finddata = await User.find({
+    username: regex
+  });
+  res.send(user);
+})
+
+# HOW DO I FIND DOCUMENT WHERE AN ARRAY FIELD CONTAINS ALL SET OF VALUES
+
+router.get("/find", async function(req,res){
+  let finddata = await User.find({
+    category : {$all : ["wwe"]}
+  });
+  res.send(finddata);
+})
+
+# HOW CAN I SEARCH FOR DOCUMENTS WITH A SPECIFIC RANGE IN MONGOOSE
+
+router.get("/finddate", async function(req,res){
+  var date1 = new Date('2025-08-15');
+  var date2 = new Date('2025-08-16');
+  let finddata = await User.find({
+  datecreated : {$gte:date1, $lte:date2}
+  });
+  res.send(finddate);
+})
+
+# HOW CAN I FILTER DOCUMENTS ON THE BASIS OF THE EXISTANCE OF A FIELD IN MONGOOSE
+
+ router.get("/exist", async function(req,res){
+  let finddata = await User.find({
+    category : {category: {$exists:true }}
+  });
+  res.send(finddata);
+})

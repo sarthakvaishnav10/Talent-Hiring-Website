@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - dot Code</title>
+    <link rel="stylesheet" href="stylesheets/login.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+    <main class="box">
+        <div class="content">
+            <span>
+                <i class="fa-solid fa-code fa-2x"></i>
+                <p>Spotlit</p>
+            </span>
+            <div class="info">
+                <p>Where Talent Meets Sponsorship.</p>
+                <button onclick="window.location.href='/'">
+                    <span>
+                        <i class="fa-solid fa-home" style="color: #ffffff;"></i>
+                    </span>
+                    Go Home
+                </button>
+            </div>
+        </div>
+        
+        <div class="login">
+            <div class="message">
+                <h3>Welcome back to Spotlit</h3>
+                <p>Sign in to to get your dream sponsorship</p>
+            </div>
+            
+            <% if (typeof error !== 'undefined') { %>
+                <div class="error"><%= error %></div>
+            <% } %>
+            
+            <form action="/login" method="POST">
+                <span class="inputDesign">
+                    <svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="#a0aec0" d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512l388.6 0c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304l-91.4 0z"/>
+                    </svg>
+                    <input type="text" name="username" placeholder="Username" required>
+                </span>
+                
+                <span class="inputDesign">
+                    <svg class="icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="#a0aec0" d="M144 144l0 48 160 0 0-48c0-44.2-35.8-80-80-80s-80 35.8-80 80zM80 192l0-48C80 64.5 144.5 0 224 0s144 64.5 144 144l0 48 16 0c35.3 0 64 28.7 64 64l0 192c0 35.3-28.7 64-64 64L64 512c-35.3 0-64-28.7-64-64L0 256c0-35.3 28.7-64 64-64l16 0z"/>
+                    </svg>
+                    <input type="password" name="password" placeholder="Password" required>
+                </span>
+                
+                <input class="btn" type="submit" value="Sign In">
+            </form>
+            
+            <div class="otherLogins">
+                <p>Or continue with these social profiles</p>
+                <div class="socialIcons">
+                    <i class="fab fa-google fa-2x"></i>
+                    <i class="fab fa-facebook fa-2x"></i>
+                    <i class="fab fa-twitter fa-2x"></i>
+                    <i class="fab fa-instagram fa-2x"></i>
+                </div>
+                <p style="color:rgb(74, 98, 255); cursor: pointer;">
+                    <a href="/register">Don't have an account? Create one</a>
+                </p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
